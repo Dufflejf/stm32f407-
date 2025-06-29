@@ -1,0 +1,17 @@
+	1.DS0(连接在PF9),DS1(连接在PF10)
+	2.串口1(波特率:115200,PA9/PA10连接在板载USB转串口芯片CH340上面)
+	3.ALIENTEK 2.8/3.5/4.3/7寸TFTLCD模块(通过FSMC驱动,FSMC_NE4接LCD片选/A6接RS)
+	4.按键KEY0(PE4)/KEY2(PE2)/KEY_UP(PA0,也称之为WK_UP) 
+	5.SD卡,通过SDIO(SDIO_D0~D4(PC8~PC11),SDIO_SCK(PC12),SDIO_CMD(PD2))连接  
+	6.DCMI接口(驱动OV2640)
+	7.定时器3(用于打印摄像头帧率等信息)
+	8.OV2640摄像头模块,连接:  
+		 OV2640    ------------ STM32
+		 OV_D0~D7  ------------  PE6/PE5/PB6/PC11/PC9/PC8/PC7/PC6
+		 OV_SCL    ------------  PD6
+		 OV_SDA    ------------  PD7
+		 OV_VSYNC  ------------  PB7
+		 OV_HREF   ------------  PA4
+		 OV_RESET  ------------  PG15
+		 OV_PCLK   ------------  PA6
+		 OV_PWDN   ------------  PG9 

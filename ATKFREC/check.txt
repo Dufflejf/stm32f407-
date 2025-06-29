@@ -1,0 +1,50 @@
+#ifndef __ATK_FREC_CHECK_H
+#define __ATK_FREC_CHECK_H
+
+#include <math.h>
+#include "atk_frec.h"
+
+// 人脸特征向量维度（不确定）
+#define ATK_FREC_FEATURE_DIM   ???
+
+// 欧氏距离阈值
+#define ATK_FREC_VALID_THRESHOLD   0.75f
+
+unsigned char atk_frec_recognition_face_check(unsigned short *data, unsigned char *findex)
+{
+    unsigned char ret;
+    float    dist = 0.0f;
+    float   *feat_in;
+    float   *feat_model;
+
+    // 调用原始识别接口
+    ret = atk_frec_recognition_face(data, findex);
+    if (ret != ATK_FREC_OK || *findex == 0xFF) {
+        // 库内识别失败或未命中
+        *findex = 0xFF;
+        return ATK_FREC_UNREC_FACE_ERR;
+    }
+
+    // 取出输入图像的特征向量
+    feat_in = model.feature;
+    // 取出匹配到的模板特征
+    feat_model = model.models[*findex];
+
+    // 计算欧氏距离
+    for (int i = 0; i < ATK_FREC_FEATURE_DIM; i++) {
+        float d = feat_in[i] - feat_model[i];
+        dist += d * d;
+    }
+    dist = sqrtf(dist);
+
+    // 阈值判断
+    if (dist > ATK_FREC_VALID_THRESHOLD) {
+        *findex = 0xFF;  // 标记为无效
+        return ATK_FREC_UNREC_FACE_ERR;
+    }
+
+    // 检测通过
+    return ATK_FREC_OK;
+}
+
+#endif // __ATK_FREC_CHECK_H
